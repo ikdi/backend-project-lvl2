@@ -1,0 +1,30 @@
+{
+  "name": "@hexlet/code",
+  "version": "0.0.1",
+  "description": "Compares two configuration files and shows a difference",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "gendiff": "bin/gendiff.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kdi-course/backend-project-lvl2.git"
+  },
+  "author": "KDI",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kdi-course/backend-project-lvl2/issues"
+  },
+  "homepage": "https://github.com/kdi-course/backend-project-lvl2#readme",
+  "dependencies": {
+    "commander": "^7.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.20.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
+  }
+}
