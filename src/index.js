@@ -22,7 +22,6 @@ const DIFF_STATUS_SIGN = {
   [DIFF_STATUS.ADDED]: '+',
 };
 
-
 const makeDiff = (object1, object2) => {
   const keysObject1 = Object.keys(object1);
   const keysObject2 = Object.keys(object2);
