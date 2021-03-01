@@ -56,7 +56,7 @@ const makeDiff = (object1, object2) => {
 
 const diffToString = (diff) => {
   const body = diff.map(({ key, value, status }) => (
-    ` ${DIFF_STATUS_SIGN[status]} ${key}: ${value}`
+    `  ${DIFF_STATUS_SIGN[status]} ${key}: ${value}`
   ));
 
   return ['{', ...body, '}'].join('\n');
