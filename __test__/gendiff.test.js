@@ -17,8 +17,14 @@ beforeAll(() => {
   expected = readFile('expected.txt');
 });
 
-test('gendiff', () => {
-  const file1 = getFixturePath('file1.json');
-  const file2 = getFixturePath('file2.json');
-  expect(gendiff(file1, file2)).toBe(expected);
+test('find the difference between JSON files', () => {
+  const file1Json = getFixturePath('file1.json');
+  const file2Json = getFixturePath('file2.json');
+  expect(gendiff(file1Json, file2Json)).toBe(expected);
+});
+
+test('find the difference between YAML files', () => {
+  const file1Json = getFixturePath('file1.yml');
+  const file2Json = getFixturePath('file2.yml');
+  expect(gendiff(file1Json, file2Json)).toBe(expected);
 });

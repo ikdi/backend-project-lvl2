@@ -1,14 +1,12 @@
-import { resolve } from 'path';
+import { resolve, extname } from 'path';
 import { readFileSync } from 'fs';
 import _ from 'lodash';
+import parse from './parsers.js';
 
-const pipe = (...funcs) => funcs.reduce((func1, func2) => (arg) => func2(func1(arg)));
-// don't use lodash consciously
+// I don't use lodash consciously
 const difference = (array1, array2) => array1.filter((item1) => !array2.includes(item1));
 const intersection = (array1, array2) => array1.filter((item1) => array2.includes(item1));
-
 const resolveFilepath = (filepath) => resolve(process.cwd(), filepath);
-const parseFileAsJson = pipe(resolveFilepath, readFileSync, JSON.parse);
 
 const DIFF_STATUS = {
   REMOVED: -1,
@@ -54,20 +52,30 @@ const makeDiff = (object1, object2) => {
   return [...removed, ...added, ...unchanged, ...changed];
 };
 
-const diffToString = (diff) => {
-  const body = diff.map(({ key, value, status }) => (
+const stringify = (diffObject) => {
+  const body = diffObject.map(({ key, value, status }) => (
     `  ${DIFF_STATUS_SIGN[status]} ${key}: ${value}`
   ));
 
   return ['{', ...body, '}'].join('\n');
 };
 
-export default (filepath1, filepath2) => {
-  const json1 = parseFileAsJson(filepath1);
-  const json2 = parseFileAsJson(filepath2);
+const getFormatByFilepath = (filepath) => extname(filepath).slice(1);
 
-  const diff = makeDiff(json1, json2);
+const getObjectFromFile = (filepath) => {
+  const resolvedFilepath = resolveFilepath(filepath);
+  const format = getFormatByFilepath(resolvedFilepath);
+  const data = readFileSync(resolvedFilepath);
+
+  return parse(data, format);
+};
+
+export default (filepath1, filepath2) => {
+  const object1 = getObjectFromFile(filepath1);
+  const object2 = getObjectFromFile(filepath2);
+
+  const diff = makeDiff(object1, object2);
   const sortedDiff = _.sortBy(diff, ['key', 'status']);
 
-  return diffToString(sortedDiff);
+  return stringify(sortedDiff);
 };

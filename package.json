@@ -1,6 +1,6 @@
 {
   "name": "@hexlet/code",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Compares two configuration files and shows a difference",
   "main": "src/index.js",
   "type": "module",
@@ -26,6 +26,7 @@
   "homepage": "https://github.com/kdi-course/backend-project-lvl2#readme",
   "dependencies": {
     "commander": "^7.1.0",
+    "js-yaml": "^3.14.1",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
