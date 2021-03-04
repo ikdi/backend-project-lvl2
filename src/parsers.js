@@ -8,7 +8,7 @@ const parsers = {
 export default (data, format) => {
   const parse = parsers[format];
   if (!parse) {
-    throw new Error(`Unknown data type(${format}) for parsing!`);
+    throw new Error(`Unknown format(${format}) for parsing!`);
   }
 
   return parse(data);
