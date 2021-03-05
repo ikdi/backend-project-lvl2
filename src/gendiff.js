@@ -2,20 +2,10 @@ import { resolve, extname } from 'path';
 import { readFileSync } from 'fs';
 import parse from './parsers.js';
 import makeDiff2 from './finddiff.js';
-import stylish from './stylish.js';
+import getFormatter from './formatters/index.js';
 
 const resolveFilepath = (filepath) => resolve(process.cwd(), filepath);
 const getFormatByFilepath = (filepath) => extname(filepath).slice(1);
-
-const formatters = { stylish };
-const getFormatter = (name) => {
-  const formatter = formatters[name];
-  if (!formatter) {
-    throw new Error(`Unknow formatter ${name}! `);
-  }
-
-  return formatter;
-};
 
 const getObjectFromFile = (filepath) => {
   const resolvedFilepath = resolveFilepath(filepath);

@@ -1,4 +1,4 @@
-import { STATUS } from './diffstatus.js';
+import nodeStatus from './nodeStatus.js';
 
 const difference = (array1, array2) => array1.filter((item1) => !array2.includes(item1));
 const intersection = (array1, array2) => array1.filter((item1) => array2.includes(item1));
@@ -17,7 +17,7 @@ const finddiff = (beforeObject, afterObject) => {
         type: 'node',
         beforeValue: beforeObject[key],
         afterValue: undefined,
-        status: STATUS.REMOVED,
+        status: nodeStatus.REMOVED,
       }
     ));
 
@@ -28,7 +28,7 @@ const finddiff = (beforeObject, afterObject) => {
         type: 'node',
         beforeValue: undefined,
         afterValue: afterObject[key],
-        status: STATUS.ADDED,
+        status: nodeStatus.ADDED,
       }
     ));
 
@@ -40,7 +40,7 @@ const finddiff = (beforeObject, afterObject) => {
       const type = 'node';
       const beforeValue = beforeObject[key];
       const afterValue = afterObject[key];
-      const status = beforeValue === afterValue ? STATUS.UNCHANGED : STATUS.CHANGED;
+      const status = beforeValue === afterValue ? nodeStatus.UNCHANGED : nodeStatus.CHANGED;
 
       return {
         key, type, beforeValue, afterValue, status,
@@ -55,7 +55,7 @@ const finddiff = (beforeObject, afterObject) => {
       const type = 'tree';
       const beforeValue = beforeObject[key];
       const afterValue = afterObject[key];
-      const status = STATUS.UNCHANGED;
+      const status = nodeStatus.UNCHANGED;
       const children = finddiff(beforeValue, afterValue);
 
       return {

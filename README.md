@@ -8,4 +8,6 @@ step 3\
 step 5\
 [![step 5](https://asciinema.org/a/3iqG6ec7BD0efQdIISASHK2CB.svg)](https://asciinema.org/a/3iqG6ec7BD0efQdIISASHK2CB)\
 step6\
-![step 6](https://asciinema.org/a/bG0ZxivI109dhkfyZWkpfwJKk.svg)](https://asciinema.org/a/bG0ZxivI109dhkfyZWkpfwJKk)
+[![step 6](https://asciinema.org/a/bG0ZxivI109dhkfyZWkpfwJKk.svg)](https://asciinema.org/a/bG0ZxivI109dhkfyZWkpfwJKk)\
+step7\
+[![step7](https://asciinema.org/a/Ta92uCX51EqE8ZJXbGbCeO7CD.svg)](https://asciinema.org/a/Ta92uCX51EqE8ZJXbGbCeO7CD)

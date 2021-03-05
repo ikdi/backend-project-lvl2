@@ -1,7 +1,22 @@
 import _ from 'lodash';
-import { STATUS, getStatusSymbol } from './diffstatus.js';
+import nodeStatus from '../nodeStatus.js';
 
 const replacer = ' '.repeat(4);
+
+const statusSymbols = {
+  [nodeStatus.ADDED]: '+',
+  [nodeStatus.REMOVED]: '-',
+  [nodeStatus.UNCHANGED]: ' ',
+};
+
+export const getStatusSymbol = (status) => {
+  const symbol = statusSymbols[status];
+  if (symbol === undefined) {
+    throw new Error(`Cant found symbol for status ${status} `);
+  }
+
+  return symbol;
+};
 
 const stringify = (value, depth) => {
   if (!_.isObject(value)) {
@@ -29,13 +44,11 @@ const iterNode = (currentNode, depth) => {
 
   let rawValue;
   switch (status) {
-    case STATUS.REMOVED:
+    case nodeStatus.REMOVED:
       rawValue = beforeValue;
       break;
-    case STATUS.ADDED:
-      rawValue = afterValue;
-      break;
-    case STATUS.UNCHANGED:
+    case nodeStatus.ADDED:
+    case nodeStatus.UNCHANGED:
       rawValue = afterValue;
       break;
     default:
@@ -63,10 +76,10 @@ const stylish = (tree) => {
           return `${indent}    ${key}: ${iterTree(children, depth + 1)}`;
         }
 
-        return status === STATUS.CHANGED
+        return status === nodeStatus.CHANGED
           ? [
-            iterNode({ ...node, status: STATUS.REMOVED }, depth),
-            iterNode({ ...node, status: STATUS.ADDED }, depth),
+            iterNode({ ...node, status: nodeStatus.REMOVED }, depth),
+            iterNode({ ...node, status: nodeStatus.ADDED }, depth),
           ]
           : iterNode(node, depth);
       });
