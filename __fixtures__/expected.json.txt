@@ -1,0 +1,137 @@
+[
+  {
+    "key": "group2",
+    "type": "node",
+    "beforeValue": {
+      "abc": 12345,
+      "deep": {
+        "id": 45
+      }
+    },
+    "status": "removed"
+  },
+  {
+    "key": "group3",
+    "type": "node",
+    "afterValue": {
+      "deep": {
+        "id": {
+          "number": 45
+        }
+      },
+      "fee": 100500
+    },
+    "status": "added"
+  },
+  {
+    "key": "common",
+    "type": "tree",
+    "children": [
+      {
+        "key": "setting2",
+        "type": "node",
+        "beforeValue": 200,
+        "status": "removed"
+      },
+      {
+        "key": "follow",
+        "type": "node",
+        "afterValue": false,
+        "status": "added"
+      },
+      {
+        "key": "setting4",
+        "type": "node",
+        "afterValue": "blah blah",
+        "status": "added"
+      },
+      {
+        "key": "setting5",
+        "type": "node",
+        "afterValue": {
+          "key5": "value5"
+        },
+        "status": "added"
+      },
+      {
+        "key": "setting1",
+        "type": "node",
+        "beforeValue": "Value 1",
+        "afterValue": "Value 1",
+        "status": "unchanged"
+      },
+      {
+        "key": "setting3",
+        "type": "node",
+        "beforeValue": true,
+        "afterValue": null,
+        "status": "changed"
+      },
+      {
+        "key": "setting6",
+        "type": "tree",
+        "children": [
+          {
+            "key": "ops",
+            "type": "node",
+            "afterValue": "vops",
+            "status": "added"
+          },
+          {
+            "key": "key",
+            "type": "node",
+            "beforeValue": "value",
+            "afterValue": "value",
+            "status": "unchanged"
+          },
+          {
+            "key": "doge",
+            "type": "tree",
+            "children": [
+              {
+                "key": "wow",
+                "type": "node",
+                "beforeValue": "",
+                "afterValue": "so much",
+                "status": "changed"
+              }
+            ],
+            "status": "unchanged"
+          }
+        ],
+        "status": "unchanged"
+      }
+    ],
+    "status": "unchanged"
+  },
+  {
+    "key": "group1",
+    "type": "tree",
+    "children": [
+      {
+        "key": "baz",
+        "type": "node",
+        "beforeValue": "bas",
+        "afterValue": "bars",
+        "status": "changed"
+      },
+      {
+        "key": "foo",
+        "type": "node",
+        "beforeValue": "bar",
+        "afterValue": "bar",
+        "status": "unchanged"
+      },
+      {
+        "key": "nest",
+        "type": "node",
+        "beforeValue": {
+          "key": "value"
+        },
+        "afterValue": "str",
+        "status": "changed"
+      }
+    ],
+    "status": "unchanged"
+  }
+]

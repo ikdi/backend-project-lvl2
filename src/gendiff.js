@@ -1,7 +1,7 @@
 import { resolve, extname } from 'path';
 import { readFileSync } from 'fs';
 import parse from './parsers.js';
-import makeDiff2 from './finddiff.js';
+import makeDiff from './makediff.js';
 import getFormatter from './formatters/index.js';
 
 const resolveFilepath = (filepath) => resolve(process.cwd(), filepath);
@@ -20,6 +20,6 @@ export default (filepath1, filepath2, formatName = 'stylish') => {
   const object1 = getObjectFromFile(filepath1);
   const object2 = getObjectFromFile(filepath2);
 
-  const diff = makeDiff2(object1, object2);
+  const diff = makeDiff(object1, object2);
   return format(diff);
 };

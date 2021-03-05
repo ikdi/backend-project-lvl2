@@ -3,7 +3,7 @@ import { Command, Option } from 'commander';
 import genDiff from '../src/gendiff.js';
 
 const formatOption = new Option('-f, --format [type]', 'output format')
-  .choices(['stylish', 'plain'])
+  .choices(['stylish', 'plain', 'json'])
   .default('stylish');
 
 const program = new Command();

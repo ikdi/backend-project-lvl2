@@ -4,7 +4,7 @@ const difference = (array1, array2) => array1.filter((item1) => !array2.includes
 const intersection = (array1, array2) => array1.filter((item1) => array2.includes(item1));
 const isObject = (value) => typeof value === 'object' && value !== null && !Array.isArray(value);
 
-const finddiff = (beforeObject, afterObject) => {
+const makediff = (beforeObject, afterObject) => {
   const beforeObjectKeys = Object.keys(beforeObject);
   const afterObjectKeys = Object.keys(afterObject);
 
@@ -56,7 +56,7 @@ const finddiff = (beforeObject, afterObject) => {
       const beforeValue = beforeObject[key];
       const afterValue = afterObject[key];
       const status = nodeStatus.UNCHANGED;
-      const children = finddiff(beforeValue, afterValue);
+      const children = makediff(beforeValue, afterValue);
 
       return {
         key, type, children: [...children], status,
@@ -66,4 +66,4 @@ const finddiff = (beforeObject, afterObject) => {
   return [...removedNodes, ...addedNodes, ...changedOrUnchangedNodes, ...treeNodes];
 };
 
-export default finddiff;
+export default makediff;

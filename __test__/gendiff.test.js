@@ -13,10 +13,12 @@ const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8'
 
 let expectedStylish;
 let expectedPlain;
+let expectedJson;
 
 beforeAll(() => {
   expectedStylish = readFile('expected.stylish.txt');
   expectedPlain = readFile('expected.plain.txt');
+  expectedJson = readFile('expected.json.txt');
 });
 
 test('find the difference between JSON files (stylish format)', () => {
@@ -41,4 +43,16 @@ test('find the difference between YAML files (plain format)', () => {
   const file1Json = getFixturePath('file1.yml');
   const file2Json = getFixturePath('file2.yml');
   expect(gendiff(file1Json, file2Json, 'plain')).toBe(expectedPlain);
+});
+
+test('find the difference between JSON files (json format)', () => {
+  const file1Json = getFixturePath('file1.json');
+  const file2Json = getFixturePath('file2.json');
+  expect(gendiff(file1Json, file2Json, 'json')).toBe(expectedJson);
+});
+
+test('find the difference between YAML files (json format)', () => {
+  const file1Json = getFixturePath('file1.yml');
+  const file2Json = getFixturePath('file2.yml');
+  expect(gendiff(file1Json, file2Json, 'json')).toBe(expectedJson);
 });
