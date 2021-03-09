@@ -31,13 +31,13 @@ export const getFormatterByStatus = (status) => {
 
 const format = (tree) => {
   const iter = (currentTree, path) => _.sortBy(currentTree, 'key')
-    .filter(({ type, status }) => (type === 'tree' || status !== nodeStatus.UNCHANGED))
+    .filter(({ children, status }) => (children || status !== nodeStatus.UNCHANGED))
     .map((node) => {
       const {
-        key, type, status, children,
+        key, status, children,
       } = node;
       const currentPath = [...path, key];
-      if (type === 'tree') {
+      if (children) {
         return iter(children, currentPath);
       }
       const fullKey = currentPath.join('.');

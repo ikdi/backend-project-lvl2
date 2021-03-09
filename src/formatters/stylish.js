@@ -8,8 +8,7 @@ const statusSymbols = {
   [nodeStatus.REMOVED]: '-',
   [nodeStatus.UNCHANGED]: ' ',
 };
-
-export const getStatusSymbol = (status) => {
+const getStatusSymbol = (status) => {
   const symbol = statusSymbols[status];
   if (symbol === undefined) {
     throw new Error(`Cant found symbol for status ${status} `);
@@ -68,11 +67,9 @@ const stylish = (tree) => {
     const lines = _
       .sortBy(currentTree, 'key')
       .flatMap((node) => {
-        const {
-          key, type, status, children,
-        } = node;
+        const { key, status, children } = node;
 
-        if (type === 'tree') {
+        if (children) {
           return `${indent}    ${key}: ${iterTree(children, depth + 1)}`;
         }
 

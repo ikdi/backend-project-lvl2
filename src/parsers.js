@@ -5,10 +5,10 @@ const parsers = {
   yml: YAML.load,
 };
 
-export default (data, format) => {
-  const parse = parsers[format];
+export default (data, name) => {
+  const parse = parsers[name];
   if (!parse) {
-    throw new Error(`Unknown format(${format}) for parsing!`);
+    throw new Error(`Unknown format(${name}) for parsing!`);
   }
 
   return parse(data);

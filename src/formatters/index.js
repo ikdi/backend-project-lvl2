@@ -3,11 +3,11 @@ import plain from './plain.js';
 import json from './json.js';
 
 const formatters = { stylish, plain, json };
-export default (name) => {
-  const formatter = formatters[name];
-  if (!formatter) {
+export default (data, name) => {
+  const format = formatters[name];
+  if (!format) {
     throw new Error(`Unknow formatter name(${name})!`);
   }
 
-  return formatter;
+  return format(data);
 };

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { Command, Option } from 'commander';
-import genDiff from '../src/gendiff.js';
+import genDiff from '../index.js';
 
 const formatOption = new Option('-f, --format [type]', 'output format')
   .choices(['stylish', 'plain', 'json'])
