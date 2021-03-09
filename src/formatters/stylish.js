@@ -35,27 +35,23 @@ const stringify = (value, depth) => {
   ].join('\n');
 };
 
+const getValue = ({ status, beforeValue, afterValue }) => {
+  if (status === nodeStatus.REMOVED) {
+    return beforeValue;
+  }
+  if (status === nodeStatus.ADDED || status === nodeStatus.UNCHANGED) {
+    return afterValue;
+  }
+  throw new Error(`Unknown status ${status} to get value!`);
+};
+
 const iterNode = (currentNode, depth) => {
   const indent = replacer.repeat(depth);
-  const {
-    key, status, beforeValue, afterValue,
-  } = currentNode;
+  const { key, status } = currentNode;
 
-  let rawValue;
-  switch (status) {
-    case nodeStatus.REMOVED:
-      rawValue = beforeValue;
-      break;
-    case nodeStatus.ADDED:
-    case nodeStatus.UNCHANGED:
-      rawValue = afterValue;
-      break;
-    default:
-      throw new Error(`Unknown ${status} in iterNode!`);
-  }
   const symbol = getStatusSymbol(status);
   const prefix = `  ${symbol} `;
-  const value = stringify(rawValue, depth + 1);
+  const value = stringify(getValue(currentNode), depth + 1);
 
   return `${indent}${prefix}${key}: ${value}`;
 };
