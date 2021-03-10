@@ -1,22 +1,6 @@
 import _ from 'lodash';
-import nodeStatus from '../nodeStatus.js';
 
 const replacer = ' '.repeat(4);
-
-const statusSymbols = {
-  [nodeStatus.ADDED]: '+',
-  [nodeStatus.REMOVED]: '-',
-  [nodeStatus.UNCHANGED]: ' ',
-};
-const getStatusSymbol = (status) => {
-  const symbol = statusSymbols[status];
-  if (symbol === undefined) {
-    throw new Error(`Cant found symbol for status ${status} `);
-  }
-
-  return symbol;
-};
-
 const stringify = (value, depth) => {
   if (!_.isObject(value)) {
     return value;
@@ -35,46 +19,55 @@ const stringify = (value, depth) => {
   ].join('\n');
 };
 
-const getValue = ({ status, beforeValue, afterValue }) => {
-  if (status === nodeStatus.REMOVED) {
-    return beforeValue;
-  }
-  if (status === nodeStatus.ADDED || status === nodeStatus.UNCHANGED) {
-    return afterValue;
-  }
-  throw new Error(`Unknown status ${status} to get value!`);
-};
-
-const iterNode = (currentNode, depth) => {
+const formatAdded = (currentNode, depth) => {
   const indent = replacer.repeat(depth);
-  const { key, status } = currentNode;
-
-  const symbol = getStatusSymbol(status);
-  const prefix = `  ${symbol} `;
-  const value = stringify(getValue(currentNode), depth + 1);
+  const { key, afterValue } = currentNode;
+  const prefix = '  + ';
+  const value = stringify(afterValue, depth + 1);
 
   return `${indent}${prefix}${key}: ${value}`;
 };
 
-const stylish = (tree) => {
+const formatRemoved = (currentNode, depth) => {
+  const indent = replacer.repeat(depth);
+  const { key, beforeValue } = currentNode;
+  const prefix = '  - ';
+  const value = stringify(beforeValue, depth + 1);
+
+  return `${indent}${prefix}${key}: ${value}`;
+};
+
+const formatUnchanged = (currentNode, depth) => {
+  const indent = replacer.repeat(depth);
+  const { key, beforeValue } = currentNode;
+  const prefix = '    ';
+  const value = stringify(beforeValue, depth + 1);
+
+  return `${indent}${prefix}${key}: ${value}`;
+};
+
+const format = (tree) => {
   const iterTree = (currentTree, depth) => {
     const indent = replacer.repeat(depth);
 
     const lines = _
       .sortBy(currentTree, 'key')
       .flatMap((node) => {
-        const { key, status, children } = node;
-
-        if (children) {
-          return `${indent}    ${key}: ${iterTree(children, depth + 1)}`;
+        const { key, type, children } = node;
+        switch (type) {
+          case 'added':
+            return formatAdded(node, depth);
+          case 'removed':
+            return formatRemoved(node, depth);
+          case 'unchanged':
+            return formatUnchanged(node, depth);
+          case 'changed':
+            return [formatRemoved(node, depth), formatAdded(node, depth)];
+          case 'nested':
+            return `${indent}    ${key}: ${iterTree(children, depth + 1)}`;
+          default:
+            throw new Error(`Unknown type ${type} when use format stylish!`);
         }
-
-        return status === nodeStatus.CHANGED
-          ? [
-            iterNode({ ...node, status: nodeStatus.REMOVED }, depth),
-            iterNode({ ...node, status: nodeStatus.ADDED }, depth),
-          ]
-          : iterNode(node, depth);
       });
 
     return [
@@ -87,4 +80,4 @@ const stylish = (tree) => {
   return iterTree(tree, 0);
 };
 
-export default stylish;
+export default format;

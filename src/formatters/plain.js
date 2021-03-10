@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import nodeStatus from '../nodeStatus.js';
 
 const formatValue = (value) => {
   if (_.isObject(value)) return '[complex value]';
@@ -14,36 +13,26 @@ const formatChanged = (name, { beforeValue, afterValue }) => (
   `Property '${name}' was updated. From ${formatValue(beforeValue)} to ${formatValue(afterValue)}`
 );
 
-const statusFormatters = {
-  [nodeStatus.ADDED]: formatAdded,
-  [nodeStatus.REMOVED]: formatRemoved,
-  [nodeStatus.CHANGED]: formatChanged,
-};
-
-export const getFormatterByStatus = (status) => {
-  const formatter = statusFormatters[status];
-  if (formatter === undefined) {
-    throw new Error(`Cannot find formatter for status ${status} `);
-  }
-
-  return formatter;
+const nodeFormatters = {
+  added: formatAdded,
+  removed: formatRemoved,
+  changed: formatChanged,
 };
 
 const format = (tree) => {
   const iter = (currentTree, path) => _.sortBy(currentTree, 'key')
-    .filter(({ children, status }) => (children || status !== nodeStatus.UNCHANGED))
+    .filter(({ type }) => (type !== 'unchanged'))
     .map((node) => {
-      const {
-        key, status, children,
-      } = node;
+      const { key, type, children } = node;
       const currentPath = [...path, key];
-      if (children) {
+
+      if (type === 'nested') {
         return iter(children, currentPath);
       }
       const fullKey = currentPath.join('.');
-      const nodeFormat = getFormatterByStatus(status);
+      const formatNode = nodeFormatters[type];
 
-      return nodeFormat(fullKey, node);
+      return formatNode(fullKey, node);
     })
     .join('\n');
 
