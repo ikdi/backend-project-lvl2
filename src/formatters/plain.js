@@ -2,37 +2,37 @@ import _ from 'lodash';
 
 const formatValue = (value) => {
   if (_.isObject(value)) return '[complex value]';
-  return typeof value === 'string' ? `'${value}'` : value;
+  if (typeof value === 'string') return `'${value}'`;
+  if (value === null) return 'null';
+
+  return value;
 };
 
-const formatAdded = (name, { afterValue }) => (
-  `Property '${name}' was added with value: ${formatValue(afterValue)}`
-);
-const formatRemoved = (name) => `Property '${name}' was removed`;
-const formatChanged = (name, { beforeValue, afterValue }) => (
-  `Property '${name}' was updated. From ${formatValue(beforeValue)} to ${formatValue(afterValue)}`
-);
-
-const nodeFormatters = {
-  added: formatAdded,
-  removed: formatRemoved,
-  changed: formatChanged,
-};
+const getPropertyName = (path, key) => [...path, key].join('.');
 
 const format = (tree) => {
-  const iter = (currentTree, path) => _.sortBy(currentTree, 'key')
+  const iter = (currentTree, path) => currentTree
     .filter(({ type }) => (type !== 'unchanged'))
     .map((node) => {
-      const { key, type, children } = node;
-      const currentPath = [...path, key];
+      const {
+        key, type, children, afterValue, beforeValue,
+      } = node;
+      const propertyName = getPropertyName(path, key);
 
-      if (type === 'nested') {
-        return iter(children, currentPath);
+      switch (type) {
+        case 'added':
+          return `Property '${propertyName}' was added with value: ${formatValue(afterValue)}`;
+        case 'removed':
+          return `Property '${propertyName}' was removed`;
+        case 'changed':
+          return (
+            `Property '${propertyName}' was updated. From ${formatValue(beforeValue)} to ${formatValue(afterValue)}`
+          );
+        case 'nested':
+          return iter(children, [...path, key]);
+        default:
+          throw new Error(`Unknown node type${type}!`);
       }
-      const fullKey = currentPath.join('.');
-      const formatNode = nodeFormatters[type];
-
-      return formatNode(fullKey, node);
     })
     .join('\n');
 

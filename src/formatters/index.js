@@ -1,6 +1,7 @@
 import stylish from './stylish.js';
 import plain from './plain.js';
-import json from './json.js';
+
+const json = (tree) => JSON.stringify(tree);
 
 const formatters = { stylish, plain, json };
 export default (data, name) => {
