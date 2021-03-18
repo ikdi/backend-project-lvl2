@@ -8,7 +8,7 @@ const formatValue = (value) => {
   return value;
 };
 
-const getPropertyName = (path, key) => [...path, key].join('.');
+const getPropertyName = (path, key) => (path === '' ? key : `${path}.${key}`);
 
 const format = (tree) => {
   const iter = (currentTree, path) => currentTree
@@ -29,14 +29,14 @@ const format = (tree) => {
             `Property '${propertyName}' was updated. From ${formatValue(beforeValue)} to ${formatValue(afterValue)}`
           );
         case 'nested':
-          return iter(children, [...path, key]);
+          return iter(children, propertyName);
         default:
-          throw new Error(`Unknown node type${type}!`);
+          throw new Error(`Unknown node type ${type}!`);
       }
     })
     .join('\n');
 
-  return iter(tree, []);
+  return iter(tree, '');
 };
 
 export default format;

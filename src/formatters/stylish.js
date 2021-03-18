@@ -1,11 +1,11 @@
 import _ from 'lodash';
 
-const replacer = ' '.repeat(4);
+const makeIndent = (count, size = 4) => ' '.repeat(size).repeat(Math.max(count, 0));
 const stringify = (value, depth) => {
   if (!_.isObject(value)) return value;
 
-  const currentIndent = replacer.repeat(depth + 1);
-  const bracketIndent = replacer.repeat(depth);
+  const currentIndent = makeIndent(depth + 2);
+  const bracketIndent = makeIndent(depth + 1);
   const lines = Object
     .entries(value)
     .map(([key, val]) => `${currentIndent}${key}: ${stringify(val, depth + 1)}`);
@@ -17,13 +17,10 @@ const stringify = (value, depth) => {
   ].join('\n');
 };
 
-const getPrefix = (indent, symbol, key) => `${indent}  ${symbol} ${key}: `;
-
 const format = (tree) => {
   const iterTree = (currentTree, depth) => {
-    const indent = replacer.repeat(depth);
-    const lines = _
-      .sortBy(currentTree, 'key')
+    const indent = makeIndent(depth);
+    const lines = currentTree
       .flatMap((node) => {
         const {
           key, type, children, afterValue, beforeValue,
@@ -31,18 +28,18 @@ const format = (tree) => {
 
         switch (type) {
           case 'added':
-            return `${getPrefix(indent, '+', key)}${stringify(afterValue, depth + 1)}`;
+            return `${indent}  + ${key}: ${stringify(afterValue, depth)}`;
           case 'removed':
-            return `${getPrefix(indent, '-', key)}${stringify(beforeValue, depth + 1)}`;
+            return `${indent}  - ${key}: ${stringify(beforeValue, depth)}`;
           case 'unchanged':
-            return `${getPrefix(indent, ' ', key)}${stringify(beforeValue, depth + 1)}`;
+            return `${indent}    ${key}: ${stringify(beforeValue, depth)}`;
           case 'changed':
             return [
-              `${getPrefix(indent, '-', key)}${stringify(beforeValue, depth + 1)}`,
-              `${getPrefix(indent, '+', key)}${stringify(afterValue, depth + 1)}`,
+              `${indent}  - ${key}: ${stringify(beforeValue, depth)}`,
+              `${indent}  + ${key}: ${stringify(afterValue, depth)}`,
             ];
           case 'nested':
-            return `${getPrefix(indent, ' ', key)}${iterTree(children, depth + 1)}`;
+            return `${indent}    ${key}: ${iterTree(children, depth + 1)}`;
           default:
             throw new Error(`Unknown type ${type} when use format stylish!`);
         }
